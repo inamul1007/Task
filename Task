@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main()
+{
+    vector<vector<int>>chess1({        // Sample input
+        { 0, 0, 0, -1, 0, 0, 0, -1},   // 0 for active and -1 for inactive
+        { 0, 0, 0, 0, 0, 0, 0, 0, },
+        { -1, 0, 0, 0, 0, 0, -1, 0},
+        { 0, 0, 0, 0, 0, 0, 0, 0, },
+        { 0, 0, 0, -1, 0, 0, 0, 0},
+        { 0, 0, 0, 0, 0, 0, 0, 0, },
+        { 0, 0, 0, 0, 0, 0, 0, -1},
+        { 0,-1, 0, 0, 0, 0, 0, 0, }
+    });
+    vector<vector<int>>chess2(chess1);
+ 
+    int n=chess1.size();
+ 
+    int bishop_x = 3, bishop_y = 2;   // position of bishop
+    int horse_x = 6, horse_y = 6;     // position of horse 
+    
+    queue<pair<int,int>>q;
+    q.push({bishop_x,bishop_y});
+ 
+    while(!q.empty())
+    {
+        int i = q.front().first;
+        int j = q.front().second;
+ 
+        q.pop();
+ 
+        if(i<0 || i>=n ||j<0 ||j>=n || chess1[i][j]==-1 || chess1[i][j]==1)
+            continue;
+ 
+        chess1[i][j]=1;       
+        q.push({i+1,j+1});    // possibilities of bishop
+        q.push({i+1,j-1});
+        q.push({i-1,j+1});
+        q.push({i-1,j+1});
+ 
+    }
+ 
+    q.push({horse_x,horse_y});
+ 
+    while(!q.empty())
+    {
+        int i = q.front().first;
+        int j = q.front().second;
+ 
+        q.pop();
+ 
+        if(i<0 || i>=n ||j<0 ||j>=n || chess2[i][j]==-1 || chess2[i][j]==1)
+            continue;
+ 
+        chess2[i][j]=1;
+ 
+        q.push({i+2,j+1});     // possibilities of horse
+        q.push({i+2,j-1});
+        q.push({i-2,j+1});
+        q.push({i-2,j-1});
+ 
+        q.push({i+1,j+2});
+        q.push({i-1,j+2});
+        q.push({i+1,j-2});
+        q.push({i-1,j-2});
+ 
+    }
+ 
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(chess1[i][j]==1 and chess2[i][j]==1)
+            {
+                cout<<"Bishop and horse can meet at "<<i<<" "<<j<<endl;
+                return 0;
+            }
+        }
+    }
+    cout<<"Bishop and horse can not meet at"<<endl;
+ 
+    return 0;
+}
